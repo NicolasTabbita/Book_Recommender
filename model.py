@@ -32,7 +32,7 @@ def get_recommendations(title, scores=scores):
     # Ordeno la lista de libros segun el score obtenido por cada uno
     sim_scores = sorted(sim_scores, key=lambda x:x[1], reverse=True)
 
-    # Devuelvo los 10 mas similares (salteo el 1ro ya que el libro ingresado es siempre el mas similar a si mismo)
+    # Devuelvo los 5 mas similares (salteo el 1ro ya que el libro ingresado es siempre el mas similar a si mismo)
     sim_scores = sim_scores[1:6]
 
     # Busco los indices
