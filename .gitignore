@@ -1,3 +1,9 @@
-#no sumo los archivos .pkl
+#no sumo los archivos .pkl y .ipynb excepto el notebook de la entrega
 
 *.pkl
+
+*.ipynb
+!EntregaFinal.ipynb
+
+#ignoro el dataframe bestbooks
+BestBooksDS.csv
