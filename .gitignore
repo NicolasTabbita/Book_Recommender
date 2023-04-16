@@ -7,3 +7,5 @@
 
 #ignoro el dataframe bestbooks
 BestBooksDS.csv
+
+*.png
