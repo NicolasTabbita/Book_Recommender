@@ -9,7 +9,7 @@ metadata = pd.read_csv('metadata.csv')
 indices = pd.Series(metadata.index, index=metadata['title'])
 
 
-def get_recommendations(title, scores=scores):
+def get_recommendations(filtro, scores=scores):
 
     """
     Funcion que recibe un titulo como input y devuelve los 5 libros mas similares
@@ -22,6 +22,9 @@ def get_recommendations(title, scores=scores):
         DataFrame: dataframe que contiene titulos y autores de las predicciones y el libro desde el que se obtuvieron
 
     """
+
+    # Limpio la variable pasada como filtro para obtener el titulo del libro seleccionado
+    title = filtro.split('-')[0]
 
     # Encuentro el indice del titulo ingresado
     idx = indices[title]
@@ -42,7 +45,7 @@ def get_recommendations(title, scores=scores):
     return pd.DataFrame({'Porque leiste': title,'Titulo': metadata['title'].iloc[book_indices], 'Autor': metadata['author'].iloc[book_indices]})
     
 
-def get_multiple_recommendations(books, scores):
+def get_multiple_recommendations(books):
 
     """
     Funcion que permite tomar recomendaciones de varios libros al mismo tiempo
@@ -56,9 +59,12 @@ def get_multiple_recommendations(books, scores):
     
     """
 
+    for i in range(len(books)):
+        # Limpio la variable pasada como filtro para obtener el titulo del libro seleccionado
+        books[i] = books[i].split('-')[0]
+
     # Si solo se pasa un libro, se utiliza la funcion get_recommendations y no se tiene en cuenta el score
     if len(books) == 1:
-
         return get_recommendations(books[0]).drop_duplicates(['Titulo', 'Autor'])
 
     # Si se pasa mas de 1 libro, estos tienen que tener un score que se usa para determinar la cantidad de
@@ -77,16 +83,12 @@ def get_multiple_recommendations(books, scores):
                 # Se agrega el libro pasado por 1ra vez a la lista dee libros usados
                 uniques.append(books[i])
 
-                # Solo se obtienen recomendaciones de libros con calificacion del usuario mayor a 2
-                if scores[i] > 2:
+                parcial = get_recommendations(books[i])
 
-                    parcial = get_recommendations(books[i])
-
-                    # Solo se agregan a las recomendaciones los primeros n libros siendo n el doble de la calificacion ingresada
-                    recommendations = pd.concat([recommendations, parcial[:scores[i]]], ignore_index=True)
+                recommendations = pd.concat([recommendations, parcial], ignore_index=True)
 
         # Se devuelven libros que no esten repetidos y que no se hayan usado para obtener recomendaciones
         try:
             return recommendations[~recommendations.Titulo.isin(uniques)].drop_duplicates(['Titulo', 'Autor'])
         except:
-            return 'El/los valores asignados no son validos, intenta nuevamente. \n No te olvides que los libros con score menor a 2 no obtienen recomendaciones.'
+            return 'El/los valores asignados no son validos, intenta nuevamente.'
