@@ -53,7 +53,6 @@ def get_multiple_recommendations(books):
 
     INPUTS:
         books: (list) lista de titulos de libros de los que se quieren recomendaciones (min:1, max:5)
-        scores: (list) lista de puntuaciones (de 0 al 5) que ingresa el usuario para cada libro elegido
     OUTPUT:
         dataframe: dataframe que contiene Titulo, Autor y score de las recomendaciones encontradas
     
@@ -65,10 +64,9 @@ def get_multiple_recommendations(books):
 
     # Si solo se pasa un libro, se utiliza la funcion get_recommendations y no se tiene en cuenta el score
     if len(books) == 1:
-        return get_recommendations(books[0]).drop_duplicates(['Titulo', 'Autor'])
+        return get_recommendations(books[0])
 
-    # Si se pasa mas de 1 libro, estos tienen que tener un score que se usa para determinar la cantidad de
-    # recomendaciones mostradas por libro
+    # Si se pasa mas de 1 libro, se comprueba que no hayan repetidos, y que los libros pasados no salgan como recomendacion
     else:    
 
         # Se declaran el dataframe a devolver y una lista que se usa para comprobar que no se pase 2 veces el mismo libro
@@ -83,8 +81,10 @@ def get_multiple_recommendations(books):
                 # Se agrega el libro pasado por 1ra vez a la lista dee libros usados
                 uniques.append(books[i])
 
+                # Se obtienen recomendaciones
                 parcial = get_recommendations(books[i])
 
+                # Se concatenan las recomendaciones recien obtenidas con las anteriores
                 recommendations = pd.concat([recommendations, parcial], ignore_index=True)
 
         # Se devuelven libros que no esten repetidos y que no se hayan usado para obtener recomendaciones

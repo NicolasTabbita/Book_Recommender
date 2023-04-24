@@ -69,4 +69,6 @@ with st.container():
                 Luego de seleccionar uno o mas libros que hayas leido se mostraran recomendaciones.
 
                 Para agregar/quitar un nuevo libro solo hay que seleccionar/deseleccionar los casilleros a la izquierda.
+
+                Mas informacion en el repositorio de GitHub https://github.com/NicolasTabbita/book_recommender
             """)
